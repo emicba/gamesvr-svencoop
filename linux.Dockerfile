@@ -10,9 +10,6 @@ RUN /app/steamcmd.sh +login anonymous +force_install_dir /output +app_update 276
 #=======================================================================
 FROM debian:bullseye-slim
 
-ARG BUILDNODE=unspecified
-ARG SOURCE_COMMIT=unspecified
-
 HEALTHCHECK NONE
 
 RUN dpkg --add-architecture i386 &&`
@@ -24,15 +21,6 @@ RUN dpkg --add-architecture i386 &&`
 
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 LC_ALL=en_US.UTF-8
 
-LABEL maintainer="Laclede's LAN <contact @lacledeslan.com>" `
-      com.lacledeslan.build-node=$BUILDNODE `
-      org.label-schema.schema-version="1.0" `
-      org.label-schema.url="https://github.com/LacledesLAN/README.1ST" `
-      org.label-schema.vcs-ref=$SOURCE_COMMIT `
-      org.label-schema.vendor="Laclede's LAN" `
-      org.label-schema.description="Sven Co-op Dedicated Server" `
-      org.label-schema.vcs-url="https://github.com/LacledesLAN/gamesvr-svencoop"
-
 # Set up Enviornment
 RUN useradd --home /app --gid root --system SvenCoOp &&`
     mkdir -p /app/ll-tests &&`
@@ -40,7 +28,9 @@ RUN useradd --home /app --gid root --system SvenCoOp &&`
 
 COPY --chown=SvenCoOp:root --from=svencoop-builder /output /app
 
-COPY --chown=SvenCoOp:root ./dist/ll-tests/gamesvr-svencoop.sh /app/ll-tests/gamesvr-svencoop.sh
+COPY --chown=SvenCoOp:root ./dist /app/svencoop
+
+COPY --chown=SvenCoOp:root ./ll-tests/gamesvr-svencoop.sh /app/ll-tests/gamesvr-svencoop.sh
 
 RUN chmod +x /app/ll-tests/*.sh;
 
