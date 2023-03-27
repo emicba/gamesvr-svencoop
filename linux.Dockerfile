@@ -1,5 +1,5 @@
 # escape=`
-FROM lacledeslan/steamcmd:linux as svencoop-builder
+FROM lacledeslan/steamcmd:linux@sha256:16ddbdb6707082834a52fe3603750ba0d87e36ab7a55d94d6f3dacb52d0c73b0 as svencoop-builder
 
 # Copy cached build files (if any)
 COPY ./build-cache /output
